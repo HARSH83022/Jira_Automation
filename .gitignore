@@ -1,0 +1,15 @@
+.env
+*.env
+*.db
+*.sqlite
+generated_reports/
+uploads/
+__pycache__/
+*.pyc
+.venv/
+venv/
+node_modules/
+.next/
+dist/
+build/
+.DS_Store

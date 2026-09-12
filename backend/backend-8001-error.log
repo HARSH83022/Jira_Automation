@@ -1,0 +1,16 @@
+INFO:     Started server process [26616]
+INFO:     Waiting for application startup.
+2026-09-13 00:28:07,095 | INFO     | app.main | Initialising database…
+2026-09-13 00:28:07,131 | INFO     | apscheduler.scheduler | Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-09-13 00:28:07,132 | INFO     | apscheduler.scheduler | Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-09-13 00:28:07,134 | INFO     | apscheduler.scheduler | Added job "run_automation" to job store "default"
+2026-09-13 00:28:07,149 | INFO     | apscheduler.scheduler | Added job "run_automation" to job store "default"
+2026-09-13 00:28:07,157 | INFO     | apscheduler.scheduler | Scheduler started
+2026-09-13 00:28:07,159 | INFO     | app.main | DC-AI Reporting API ready.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8001 (Press CTRL+C to quit)
+2026-09-13 00:28:19,246 | INFO     | app.datasources.csv_source | Detected 6 columns, 2 rows
+2026-09-13 00:28:19,265 | INFO     | app.datasources.csv_source | CSV parsed: 2 rows, 1 warnings
+2026-09-13 00:28:19,267 | INFO     | app.calculations.engine | Calculation complete: 2 stories, scope=8.00, completed=5.00, pct=62.50%
+2026-09-13 00:28:19,337 | INFO     | app.services.excel_service | Excel saved: ./generated_reports\DC_AI_Sprint_Test_Report_2026-09-13.xlsx
+2026-09-13 00:28:19,349 | INFO     | app.services.report_service | Report saved: id=4, file=DC_AI_Sprint_Test_Report_2026-09-13.xlsx
