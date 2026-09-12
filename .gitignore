@@ -6,6 +6,7 @@ generated_reports/
 uploads/
 __pycache__/
 *.pyc
+*.log
 .venv/
 venv/
 node_modules/
