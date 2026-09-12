@@ -173,3 +173,11 @@ cannot block report generation.
 The default Render filesystem is ephemeral. Use a Render persistent disk or
 external PostgreSQL/object storage if report history and generated Excel files
 must survive service restarts.
+
+### Netlify (frontend)
+
+Netlify can host the React frontend for free, but it cannot run this FastAPI
+backend directly. The repository includes `netlify.toml` for the frontend.
+When deploying on Netlify, set `VITE_API_URL` to the public URL of the deployed
+FastAPI backend. Without that variable, the app uses the local `/api` proxy
+for development.
