@@ -151,10 +151,25 @@ Observed result on the sample export:
 
 ## Production deployment
 
-For production, use:
+### Render (GitHub deployment)
 
-- a production-grade PostgreSQL or SQLite-backed environment
-- secret management for Outlook and AI keys
-- Nginx or a reverse proxy in front of the FastAPI app
-- environment variables for all service credentials
-- a dedicated generated_reports storage path with backup/retention policy
+This repository includes a `Dockerfile` and `render.yaml` for a single-service
+Render deployment. The container builds the React frontend and serves it from
+the FastAPI application, so the deployed app uses one URL and does not need a
+separate frontend proxy.
+
+1. In Render, choose **New → Blueprint**.
+2. Connect the GitHub repository `HARSH83022/Jira_Automation`.
+3. Select the `main` branch and apply `render.yaml`.
+4. Deploy the service and open the generated `onrender.com` URL.
+5. Add `GEMINI_API_KEY`, `GMAIL_USER`, `GMAIL_APP_PASSWORD`, and any Outlook
+   credentials in Render environment variables only; never commit them.
+
+The deterministic report workflow does not require Gemini. Set
+`DEFAULT_AI_PROVIDER=gemini` only after adding a valid `GEMINI_API_KEY`.
+The default deployment intentionally uses `none` so offline AI availability
+cannot block report generation.
+
+The default Render filesystem is ephemeral. Use a Render persistent disk or
+external PostgreSQL/object storage if report history and generated Excel files
+must survive service restarts.

@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: jira-automation
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /health
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: DATABASE_URL
+        value: sqlite:///./dc_ai_reports.db
+      - key: REPORT_STORAGE_PATH
+        value: ./generated_reports
+      - key: DEFAULT_AI_PROVIDER
+        value: none
+      - key: SECRET_KEY
+        generateValue: true

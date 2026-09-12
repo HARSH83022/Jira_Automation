@@ -2,6 +2,7 @@ import logging
 import os
 
 from fastapi import FastAPI
+from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
@@ -65,3 +66,19 @@ def root():
 @app.get("/health")
 def health():
     return {"status": "ok"}
+
+
+# In the production container the React build is served by the same FastAPI
+# process, which keeps the GitHub deployment to a single Render service.
+_frontend_dist = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "frontend_dist"))
+if os.path.isdir(_frontend_dist):
+    _assets_dir = os.path.join(_frontend_dist, "assets")
+    if os.path.isdir(_assets_dir):
+        app.mount("/assets", StaticFiles(directory=_assets_dir), name="frontend-assets")
+
+    @app.get("/{path:path}", include_in_schema=False)
+    def frontend_app(path: str):
+        requested = os.path.join(_frontend_dist, path)
+        if path and os.path.isfile(requested):
+            return FileResponse(requested)
+        return FileResponse(os.path.join(_frontend_dist, "index.html"))
