@@ -8,6 +8,7 @@ from fastapi.staticfiles import StaticFiles
 
 from app.api import reports, developers, settings, outlook, ai, email
 from app.database import init_db
+from app.config import settings as app_settings
 from app.services.scheduler import configure_scheduler, shutdown_scheduler
 
 # ── Logging ──────────────────────────────────────────────────────────────────
@@ -47,8 +48,8 @@ app.include_router(email.router)
 def on_startup():
     logger.info("Initialising database…")
     init_db()
-    os.makedirs("./generated_reports", exist_ok=True)
-    os.makedirs("./uploads", exist_ok=True)
+    os.makedirs(app_settings.REPORT_STORAGE_PATH, exist_ok=True)
+    os.makedirs(app_settings.UPLOAD_STORAGE_PATH, exist_ok=True)
     configure_scheduler()
     logger.info("DC-AI Reporting API ready.")
 

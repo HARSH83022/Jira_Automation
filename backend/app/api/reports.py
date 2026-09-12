@@ -10,6 +10,7 @@ from fastapi.responses import FileResponse, HTMLResponse
 from sqlalchemy.orm import Session
 
 from app.database import get_db
+from app.config import settings
 from app.models.report import Report
 from app.services.report_service import ReportService
 
@@ -59,7 +60,7 @@ async def upload_and_generate(
     Scenario 2 — EOD only     : snapshot_type=EOD,     eod_file=<file>
     Scenario 3 — Both         : snapshot_type=EOD,     eod_file=<file>, morning_file=<file>
     """
-    os.makedirs("./uploads", exist_ok=True)
+    os.makedirs(settings.UPLOAD_STORAGE_PATH, exist_ok=True)
 
     # Validate: at least one file must be supplied
     morning_provided = morning_file and morning_file.filename
@@ -87,7 +88,9 @@ async def upload_and_generate(
     # Support .csv, .tsv, .txt
     if primary_ext.lower() not in (".csv", ".tsv", ".txt"):
         primary_ext = ".csv"
-    primary_path = f"./uploads/{uuid.uuid4().hex}{primary_ext}"
+    primary_path = os.path.join(
+        settings.UPLOAD_STORAGE_PATH, f"{uuid.uuid4().hex}{primary_ext}"
+    )
     with open(primary_path, "wb") as f:
         shutil.copyfileobj(primary_file.file, f)
 
@@ -97,7 +100,9 @@ async def upload_and_generate(
         sec_ext = os.path.splitext(secondary_file.filename)[1] or ".csv"
         if sec_ext.lower() not in (".csv", ".tsv", ".txt"):
             sec_ext = ".csv"
-        secondary_path = f"./uploads/{uuid.uuid4().hex}{sec_ext}"
+        secondary_path = os.path.join(
+            settings.UPLOAD_STORAGE_PATH, f"{uuid.uuid4().hex}{sec_ext}"
+        )
         with open(secondary_path, "wb") as f:
             shutil.copyfileobj(secondary_file.file, f)
 
@@ -129,9 +134,11 @@ async def validate_csv(
     db: Session = Depends(get_db),
 ):
     """Validate a CSV without generating a report."""
-    os.makedirs("./uploads", exist_ok=True)
+    os.makedirs(settings.UPLOAD_STORAGE_PATH, exist_ok=True)
     ext = os.path.splitext(file.filename)[1]
-    tmp_path = f"./uploads/validate_{uuid.uuid4().hex}{ext}"
+    tmp_path = os.path.join(
+        settings.UPLOAD_STORAGE_PATH, f"validate_{uuid.uuid4().hex}{ext}"
+    )
     with open(tmp_path, "wb") as f:
         shutil.copyfileobj(file.file, f)
     try:

@@ -5,7 +5,11 @@ import os
 
 class Settings(BaseSettings):
     APP_ENV: str = "development"
-    DATABASE_URL: str = "sqlite:///./dc_ai_reports.db"
+    DATABASE_URL: str = (
+        "sqlite:////tmp/dc_ai_reports.db"
+        if os.getenv("VERCEL")
+        else "sqlite:///./dc_ai_reports.db"
+    )
     REPORT_TEMPLATE_PATH: str = ""
     GMAIL_USER: Optional[str] = None
     GMAIL_APP_PASSWORD: Optional[str] = None
@@ -23,7 +27,12 @@ class Settings(BaseSettings):
     DEFAULT_AI_PROVIDER: str = "none"
 
     # Storage
-    REPORT_STORAGE_PATH: str = "./generated_reports"
+    REPORT_STORAGE_PATH: str = (
+        "/tmp/generated_reports"
+        if os.getenv("VERCEL")
+        else "./generated_reports"
+    )
+    UPLOAD_STORAGE_PATH: str = "/tmp/uploads" if os.getenv("VERCEL") else "./uploads"
     MAX_UPLOAD_SIZE_MB: int = 20
 
     # Security
@@ -38,4 +47,4 @@ settings = Settings()
 
 # Ensure storage directories exist
 os.makedirs(settings.REPORT_STORAGE_PATH, exist_ok=True)
-os.makedirs("./uploads", exist_ok=True)
+os.makedirs(settings.UPLOAD_STORAGE_PATH, exist_ok=True)
