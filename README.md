@@ -181,3 +181,19 @@ backend directly. The repository includes `netlify.toml` for the frontend.
 When deploying on Netlify, set `VITE_API_URL` to the public URL of the deployed
 FastAPI backend. Without that variable, the app uses the local `/api` proxy
 for development.
+
+### Vercel (full-stack GitHub deployment)
+
+The repository also includes `vercel.json` and `api/index.py` for a single
+Vercel deployment. Vercel builds the React frontend and exposes the FastAPI
+application under `/api`.
+
+1. Open Vercel and choose **Add New → Project**.
+2. Import `HARSH83022/Jira_Automation` from GitHub.
+3. Keep the root directory as the repository root and deploy.
+4. Add `GEMINI_API_KEY` and other private credentials in Vercel project
+   environment variables only.
+
+Vercel serverless storage is ephemeral: SQLite data and generated Excel files
+are not durable across deployments. Use an external database/object store for
+persistent production history.
