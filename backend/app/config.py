@@ -1,3 +1,4 @@
+from pydantic import field_validator
 from pydantic_settings import BaseSettings
 from typing import Optional
 import os
@@ -34,6 +35,32 @@ class Settings(BaseSettings):
     )
     UPLOAD_STORAGE_PATH: str = "/tmp/uploads" if os.getenv("VERCEL") else "./uploads"
     MAX_UPLOAD_SIZE_MB: int = 20
+
+    @field_validator("DATABASE_URL", mode="before")
+    @classmethod
+    def use_default_for_blank_database_url(cls, value: object) -> object:
+        if value == "":
+            return "sqlite:////tmp/dc_ai_reports.db" if os.getenv("VERCEL") else "sqlite:///./dc_ai_reports.db"
+        return value
+
+    @field_validator("REPORT_STORAGE_PATH", mode="before")
+    @classmethod
+    def use_default_for_blank_report_path(cls, value: object) -> object:
+        if value == "":
+            return "/tmp/generated_reports" if os.getenv("VERCEL") else "./generated_reports"
+        return value
+
+    @field_validator("UPLOAD_STORAGE_PATH", mode="before")
+    @classmethod
+    def use_default_for_blank_upload_path(cls, value: object) -> object:
+        if value == "":
+            return "/tmp/uploads" if os.getenv("VERCEL") else "./uploads"
+        return value
+
+    @field_validator("MAX_UPLOAD_SIZE_MB", mode="before")
+    @classmethod
+    def use_default_for_blank_upload_limit(cls, value: object) -> object:
+        return 20 if value == "" else value
 
     # Security
     SECRET_KEY: str = "change-this-to-a-random-secret-key"

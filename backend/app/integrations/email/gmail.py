@@ -23,7 +23,7 @@ class GmailEmailProvider(EmailProvider):
     def validate_configuration(self) -> None:
         if not self.user or not self.app_password:
             raise ValueError(
-                "Gmail is not configured. Set GMAIL_USER and GMAIL_APP_PASSWORD in backend/.env."
+                "Gmail is not configured. Set GMAIL_USER and GMAIL_APP_PASSWORD in the Vercel project environment variables."
             )
 
     def send(
